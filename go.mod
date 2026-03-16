@@ -5,7 +5,7 @@ go 1.25.5
 require (
 	github.com/google/go-github/v82 v82.0.0
 	github.com/grokify/gogithub v0.9.1
-	github.com/grokify/omnistorage v0.2.1
+	github.com/grokify/omnistorage v0.2.2
 	golang.org/x/oauth2 v0.35.0
 )
 
