@@ -9,5 +9,5 @@ github.com/grokify/gogithub v0.9.1 h1:52jxAZhks4oTGeQA/bPY+Fdxg6FRJMLmWVULXuFjH+
 github.com/grokify/gogithub v0.9.1/go.mod h1:YrOcn7jxU0gTL2TLGe49A2nhLjIoNswkHkh2F3vAsKI=
 github.com/plexusone/omnistorage-core v0.3.0 h1:bdobNqlJuOKUgM512hmyqS3ZqTnix4Zmkq1fQf0Qk/U=
 github.com/plexusone/omnistorage-core v0.3.0/go.mod h1:Q/+IjtnYjtP1CEXT/u/uZxcIc4iAyri/oVmXSZRVjRY=
-golang.org/x/oauth2 v0.35.0 h1:Mv2mzuHuZuY2+bkyWXIHMfhNdJAdwW3FuWeCPYN5GVQ=
-golang.org/x/oauth2 v0.35.0/go.mod h1:lzm5WQJQwKZ3nwavOZ3IS5Aulzxi68dUSgRHujetwEA=
+golang.org/x/oauth2 v0.36.0 h1:peZ/1z27fi9hUOFCAZaHyrpWG5lwe0RJEEEeH0ThlIs=
+golang.org/x/oauth2 v0.36.0/go.mod h1:YDBUJMTkDnJS+A4BP4eZBjCqtokkg1hODuPjwiGPO7Q=
