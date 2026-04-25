@@ -4,13 +4,17 @@ on:
     branches:
       - main
     paths:
-      - 'omnistorage/**'
+      - '**.go'
+      - 'go.mod'
+      - 'go.sum'
       - '.github/workflows/lint.yaml'
   pull_request:
     branches:
       - main
     paths:
-      - 'omnistorage/**'
+      - '**.go'
+      - 'go.mod'
+      - 'go.sum'
       - '.github/workflows/lint.yaml'
   workflow_dispatch:
 permissions:
@@ -29,4 +33,3 @@ jobs:
       with:
         version: latest
         args: --timeout 3m --verbose
-        working-directory: omnistorage

@@ -6,13 +6,17 @@ on:
     branches:
       - main
     paths:
-      - 'omnistorage/**'
+      - '**.go'
+      - 'go.mod'
+      - 'go.sum'
       - '.github/workflows/ci.yaml'
   pull_request:
     branches:
       - main
     paths:
-      - 'omnistorage/**'
+      - '**.go'
+      - 'go.mod'
+      - 'go.sum'
       - '.github/workflows/ci.yaml'
   workflow_dispatch:
 jobs:
@@ -30,5 +34,4 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v6
     - name: Run tests
-      working-directory: omnistorage
       run: go test -v -covermode=count ./...
