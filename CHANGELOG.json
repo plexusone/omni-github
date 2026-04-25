@@ -1,12 +1,37 @@
 {
-  "ir_version": "1.0",
-  "project": "omnistorage-github",
-  "repository": "https://github.com/grokify/omnistorage-github",
+  "irVersion": "1.0",
+  "project": "omni-github",
+  "repository": "https://github.com/plexusone/omni-github",
   "versioning": "semver",
-  "commit_convention": "conventional",
+  "commitConvention": "conventional",
   "releases": [
     {
-      "version": "0.1.1",
+      "version": "v0.2.0",
+      "date": "2026-04-25",
+      "highlights": [
+        { "description": "Restructured as root-level Go module for simpler imports" }
+      ],
+      "breaking": [
+        { "description": "Move backend from `omnistorage/` to root directory", "commit": "bdb17fa" },
+        { "description": "Module path changed from `github.com/plexusone/omni-github/omnistorage` to `github.com/plexusone/omni-github`", "commit": "f0a76bd" },
+        { "description": "Import path changed from `.../omnistorage/backend/github` to `.../backend/github`", "commit": "bdb17fa" }
+      ],
+      "dependencies": [
+        { "description": "`github.com/google/go-github/v84` v84.0.0 (was v82)", "commit": "7562c9e" }
+      ],
+      "documentation": [
+        { "description": "Update README for root-level module with new import paths", "commit": "409dabe" },
+        { "description": "Update README shields for plexusone organization", "commit": "0ecda67" },
+        { "description": "Add icons to README features section", "commit": "3395edc" }
+      ],
+      "infrastructure": [
+        { "description": "Update CI workflows for root-level module (remove working-directory)", "commit": "ba52b93" },
+        { "description": "Rename workflows to use shared workflow naming", "commit": "09560fc" },
+        { "description": "Update workflows to use shared workflow files", "commit": "8a0ba83" }
+      ]
+    },
+    {
+      "version": "v0.1.1",
       "date": "2026-01-17",
       "changed": [
         { "description": "Upgrade `go-github` from v68 to v81", "commit": "1cd5f90" },
@@ -19,7 +44,7 @@
       ]
     },
     {
-      "version": "0.1.0",
+      "version": "v0.1.0",
       "date": "2026-01-10",
       "highlights": [
         { "description": "Initial release with GitHub repository backend for OmniStorage" }
