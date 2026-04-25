@@ -22,7 +22,7 @@ GitHub repository backend for [omnistorage-core](https://github.com/plexusone/om
 ## Installation
 
 ```bash
-go get github.com/plexusone/omni-github/omnistorage
+go get github.com/plexusone/omni-github
 ```
 
 ## Quick Start
@@ -38,7 +38,7 @@ import (
     "log"
     "os"
 
-    "github.com/plexusone/omni-github/omnistorage/backend/github"
+    "github.com/plexusone/omni-github/backend/github"
 )
 
 func main() {
@@ -131,7 +131,7 @@ backend, err := github.New(github.Config{
 ```go
 import (
     omnistorage "github.com/plexusone/omnistorage-core/object"
-    _ "github.com/plexusone/omni-github/omnistorage/backend/github" // Register backend
+    _ "github.com/plexusone/omni-github/backend/github" // Register backend
 )
 
 backend, err := omnistorage.Open("github", map[string]string{
@@ -239,7 +239,7 @@ MIT License - see [LICENSE](LICENSE) for details.
  [lint-status-url]: https://github.com/plexusone/omni-github/actions/workflows/lint.yaml
  [goreport-svg]: https://goreportcard.com/badge/github.com/plexusone/omni-github
  [goreport-url]: https://goreportcard.com/report/github.com/plexusone/omni-github
- [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/plexusone/omni-github/omnistorage
- [docs-godoc-url]: https://pkg.go.dev/github.com/plexusone/omni-github/omnistorage
+ [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/plexusone/omni-github
+ [docs-godoc-url]: https://pkg.go.dev/github.com/plexusone/omni-github
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
  [license-url]: https://github.com/plexusone/omni-github/blob/main/LICENSE
