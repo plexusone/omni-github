@@ -8,7 +8,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/google/go-github/v82/github"
+	"github.com/google/go-github/v84/github"
 	gherrors "github.com/grokify/gogithub/errors"
 	"github.com/grokify/gogithub/pathutil"
 	omnistorage "github.com/plexusone/omnistorage-core/object"
