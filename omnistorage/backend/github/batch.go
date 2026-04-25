@@ -7,7 +7,7 @@ import (
 
 	"github.com/google/go-github/v82/github"
 	"github.com/grokify/gogithub/pathutil"
-	"github.com/grokify/omnistorage"
+	omnistorage "github.com/plexusone/omnistorage-core/object"
 )
 
 // BatchOperation represents a single operation in a batch.

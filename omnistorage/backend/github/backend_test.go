@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/grokify/gogithub/pathutil"
-	"github.com/grokify/omnistorage"
+	omnistorage "github.com/plexusone/omnistorage-core/object"
 )
 
 // skipIfNoToken skips the test if GITHUB_TOKEN is not set.
