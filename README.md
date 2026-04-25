@@ -31,14 +31,14 @@ GitHub repository backend for [omnistorage-core](https://github.com/plexusone/om
 
 ## Features
 
-- Read and write files to any branch of a GitHub repository
-- Batch multiple file operations into a single atomic commit
-- List files in directories with prefix filtering
-- Get file metadata (size, SHA1 hash)
-- Delete files from the repository
-- Configurable commit messages and author
-- Support for GitHub Enterprise
-- Automatic registration with OmniStorage registry
+- 📄 Read and write files to any branch of a GitHub repository
+- ⚡ Batch multiple file operations into a single atomic commit
+- 📂 List files in directories with prefix filtering
+- ℹ️ Get file metadata (size, SHA1 hash)
+- 🗑️ Delete files from the repository
+- ⚙️ Configurable commit messages and author
+- 🏢 Support for GitHub Enterprise
+- 🔗 Automatic registration with OmniStorage registry
 
 ## Installation
 
