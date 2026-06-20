@@ -8,7 +8,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/google/go-github/v84/github"
+	"github.com/google/go-github/v88/github"
 	gherrors "github.com/grokify/gogithub/errors"
 	"github.com/grokify/gogithub/pathutil"
 	omnistorage "github.com/plexusone/omnistorage-core/object"
@@ -66,17 +66,15 @@ func New(cfg Config) (*Backend, error) {
 	tc := oauth2.NewClient(context.Background(), ts)
 
 	// Create GitHub client
-	var client *github.Client
-	var err error
-
+	opts := []github.ClientOptionsFunc{github.WithHTTPClient(tc)}
 	if cfg.BaseURL != "https://api.github.com/" {
 		// GitHub Enterprise
-		client, err = github.NewClient(tc).WithEnterpriseURLs(cfg.BaseURL, cfg.UploadURL)
-		if err != nil {
-			return nil, fmt.Errorf("github: creating enterprise client: %w", err)
-		}
-	} else {
-		client = github.NewClient(tc)
+		opts = append(opts, github.WithEnterpriseURLs(cfg.BaseURL, cfg.UploadURL))
+	}
+
+	client, err := github.NewClient(opts...)
+	if err != nil {
+		return nil, fmt.Errorf("github: creating client: %w", err)
 	}
 
 	return &Backend{

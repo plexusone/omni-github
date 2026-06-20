@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/google/go-github/v84/github"
+	"github.com/google/go-github/v88/github"
 	"github.com/grokify/gogithub/pathutil"
 	omnistorage "github.com/plexusone/omnistorage-core/object"
 )
