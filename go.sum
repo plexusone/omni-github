@@ -7,7 +7,7 @@ github.com/google/go-querystring v1.2.0 h1:yhqkPbu2/OH+V9BfpCVPZkNmUXhb2gBxJArfh
 github.com/google/go-querystring v1.2.0/go.mod h1:8IFJqpSRITyJ8QhQ13bmbeMBDfmeEJZD5A0egEOmkqU=
 github.com/grokify/gogithub v0.12.1 h1:sCSq/1uX4j0REliYPVOdwsb/tfLs72JOEyn/uP2SeDg=
 github.com/grokify/gogithub v0.12.1/go.mod h1:jM23QcxP8IcBSC4oOgcchp+1ckPcZKYlaohnOsJ6Ewg=
-github.com/plexusone/omnistorage-core v0.3.0 h1:bdobNqlJuOKUgM512hmyqS3ZqTnix4Zmkq1fQf0Qk/U=
-github.com/plexusone/omnistorage-core v0.3.0/go.mod h1:Q/+IjtnYjtP1CEXT/u/uZxcIc4iAyri/oVmXSZRVjRY=
+github.com/plexusone/omnistorage-core v0.4.0 h1:qvaWoXa3X3Gc3AE6++0f6XBdEnIx+t6tE9W1HYfVIS8=
+github.com/plexusone/omnistorage-core v0.4.0/go.mod h1:dCz/OdAc/5UgNR6kkdRcec18VvRhSsqOn3fYO6TjqVI=
 golang.org/x/oauth2 v0.36.0 h1:peZ/1z27fi9hUOFCAZaHyrpWG5lwe0RJEEEeH0ThlIs=
 golang.org/x/oauth2 v0.36.0/go.mod h1:YDBUJMTkDnJS+A4BP4eZBjCqtokkg1hODuPjwiGPO7Q=
