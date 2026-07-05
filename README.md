@@ -5,6 +5,7 @@
 [![Go SAST][go-sast-svg]][go-sast-url]
 [![Go Report Card][goreport-svg]][goreport-url]
 [![Docs][docs-godoc-svg]][docs-godoc-url]
+[![Docs][docs-mkdoc-svg]][docs-mkdoc-url]
 [![Visualization][viz-svg]][viz-url]
 [![License][license-svg]][license-url]
 
@@ -18,27 +19,21 @@
  [goreport-url]: https://goreportcard.com/report/github.com/plexusone/omni-github
  [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/plexusone/omni-github
  [docs-godoc-url]: https://pkg.go.dev/github.com/plexusone/omni-github
- [docs-mkdoc-svg]: https://img.shields.io/badge/Go-dev%20guide-blue.svg
- [docs-mkdoc-url]: https://plexusone.dev/omni-github
- [viz-svg]: https://img.shields.io/badge/Go-visualizaton-blue.svg
+ [docs-mkdoc-svg]: https://img.shields.io/badge/docs-guide-blue.svg
+ [docs-mkdoc-url]: https://plexusone.github.io/omni-github
+ [viz-svg]: https://img.shields.io/badge/repo-visualization-blue.svg
  [viz-url]: https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=plexusone%2Fomni-github
- [loc-svg]: https://tokei.rs/b1/github/plexusone/omni-github
- [repo-url]: https://github.com/plexusone/omni-github
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
  [license-url]: https://github.com/plexusone/omni-github/blob/main/LICENSE
 
-GitHub repository backend for [omnistorage-core](https://github.com/plexusone/omnistorage-core).
+GitHub providers and skills for the PlexusOne ecosystem.
 
-## Features
+## Packages
 
-- 📄 Read and write files to any branch of a GitHub repository
-- ⚡ Batch multiple file operations into a single atomic commit
-- 📂 List files in directories with prefix filtering
-- ℹ️ Get file metadata (size, SHA1 hash)
-- 🗑️ Delete files from the repository
-- ⚙️ Configurable commit messages and author
-- 🏢 Support for GitHub Enterprise
-- 🔗 Automatic registration with OmniStorage registry
+| Package | Description | Documentation |
+|---------|-------------|---------------|
+| `omnistorage/` | GitHub as storage backend | [Guide](https://plexusone.github.io/omni-github/omnistorage/overview/) |
+| `omniskill/github/` | GitHub skill for AI agents | [Guide](https://plexusone.github.io/omni-github/omniskill/github/) |
 
 ## Installation
 
@@ -48,207 +43,84 @@ go get github.com/plexusone/omni-github
 
 ## Quick Start
 
-### Reading Files
+### Storage Provider
 
 ```go
-package main
+import "github.com/plexusone/omni-github/omnistorage"
 
-import (
-    "context"
-    "io"
-    "log"
-    "os"
-
-    "github.com/plexusone/omni-github/backend/github"
-)
-
-func main() {
-    backend, err := github.New(github.Config{
-        Owner:  "plexusone",
-        Repo:   "omnistorage-core",
-        Branch: "main",
-        Token:  os.Getenv("GITHUB_TOKEN"),
-    })
-    if err != nil {
-        log.Fatal(err)
-    }
-    defer backend.Close()
-
-    ctx := context.Background()
-
-    // Read a file
-    r, err := backend.NewReader(ctx, "README.md")
-    if err != nil {
-        log.Fatal(err)
-    }
-    defer r.Close()
-
-    data, _ := io.ReadAll(r)
-    log.Println(string(data))
-}
-```
-
-### Writing Files
-
-```go
-// Write a new file (creates a commit)
-w, err := backend.NewWriter(ctx, "docs/example.txt")
-if err != nil {
-    log.Fatal(err)
-}
-w.Write([]byte("Hello, GitHub!"))
-w.Close() // Commits the file
-
-// Update an existing file (creates another commit)
-w2, _ := backend.NewWriter(ctx, "docs/example.txt")
-w2.Write([]byte("Updated content"))
-w2.Close()
-
-// Delete a file (creates a commit)
-backend.Delete(ctx, "docs/example.txt")
-```
-
-### Batch Operations
-
-For multiple file operations in a single commit, use the batch API:
-
-```go
-// Create a batch
-batch, err := backend.NewBatch(ctx, "Update multiple files")
-if err != nil {
-    log.Fatal(err)
-}
-
-// Queue operations
-batch.Write("file1.txt", []byte("content for file 1"))
-batch.Write("file2.txt", []byte("content for file 2"))
-batch.Delete("old-file.txt")
-
-// Commit all changes atomically
-if err := batch.Commit(); err != nil {
-    log.Fatal(err)
-}
-```
-
-The batch API uses the Git Trees and Commits API to create a single commit with all changes, which is more efficient than individual writes when updating multiple files.
-
-### Custom Commit Messages
-
-```go
-backend, err := github.New(github.Config{
-    Owner:         "myorg",
-    Repo:          "my-repo",
-    Token:         os.Getenv("GITHUB_TOKEN"),
-    CommitMessage: "[bot] Update {path}",
-    CommitAuthor: &github.CommitAuthor{
-        Name:  "My Bot",
-        Email: "bot@example.com",
-    },
+backend, err := omnistorage.New(omnistorage.Config{
+    Owner:  "myorg",
+    Repo:   "myrepo",
+    Branch: "main",
+    Token:  os.Getenv("GITHUB_TOKEN"),
 })
+
+// Read files
+r, _ := backend.NewReader(ctx, "README.md")
+data, _ := io.ReadAll(r)
+
+// Write files (creates commit)
+w, _ := backend.NewWriter(ctx, "docs/example.txt")
+w.Write([]byte("Hello!"))
+w.Close()
+
+// Batch operations (single commit)
+batch, _ := backend.NewBatch(ctx, "Update files")
+batch.Write("file1.txt", []byte("content"))
+batch.Delete("old.txt")
+batch.Commit()
 ```
 
-## Using the Registry
+### GitHub Skill
 
 ```go
-import (
-    omnistorage "github.com/plexusone/omnistorage-core/object"
-    _ "github.com/plexusone/omni-github/backend/github" // Register backend
-)
+import "github.com/plexusone/omni-github/omniskill/github"
 
-backend, err := omnistorage.Open("github", map[string]string{
-    "owner":  "plexusone",
-    "repo":   "omnistorage-core",
-    "branch": "main",
-    "token":  os.Getenv("GITHUB_TOKEN"),
+skill := github.New(github.Config{
+    Token: os.Getenv("GITHUB_TOKEN"),
 })
+skill.Init(ctx)
+
+// 10 tools: list_issues, create_issue, search_code, etc.
+agent.RegisterSkill(skill)
 ```
 
-## Configuration
+## Features
 
-### Config Struct
+### Storage Provider
 
-```go
-type Config struct {
-    Owner     string // Repository owner (required)
-    Repo      string // Repository name (required)
-    Branch    string // Branch name (default: "main")
-    Token     string // GitHub personal access token (required)
-    BaseURL   string // API base URL (default: "https://api.github.com/")
-    UploadURL string // Upload URL (default: "https://uploads.github.com/")
+- 📄 Read/write files to any branch
+- ⚡ Batch operations for atomic commits
+- 📂 List files with prefix filtering
+- 🏢 GitHub Enterprise support
 
-    // CommitMessage is the commit message template.
-    // Use {path} as a placeholder for the file path.
-    // Default: "Update {path} via omnistorage"
-    CommitMessage string
+### GitHub Skill
 
-    // CommitAuthor is the author for commits.
-    // If nil, uses the authenticated user.
-    CommitAuthor *CommitAuthor
-}
-```
+- 🎫 Issue management (list, create, update, comment)
+- 🔀 Pull request operations
+- 🔍 Code and issue search
+- 🏢 GitHub Enterprise support
 
-### GitHub Enterprise
+## Documentation
 
-```go
-backend, err := github.New(github.Config{
-    Owner:     "myorg",
-    Repo:      "myrepo",
-    Branch:    "main",
-    Token:     os.Getenv("GITHUB_TOKEN"),
-    BaseURL:   "https://github.example.com/api/v3/",
-    UploadURL: "https://github.example.com/uploads/",
-})
-```
+Full documentation at [plexusone.github.io/omni-github](https://plexusone.github.io/omni-github)
 
-### Environment Variables
+- [Installation](https://plexusone.github.io/omni-github/getting-started/installation/)
+- [Quick Start](https://plexusone.github.io/omni-github/getting-started/quickstart/)
+- [Storage Provider](https://plexusone.github.io/omni-github/omnistorage/overview/)
+- [GitHub Skill](https://plexusone.github.io/omni-github/omniskill/github/)
 
-Configuration can also be loaded from environment variables:
+## Requirements
 
-```go
-cfg := github.ConfigFromEnv()
-backend, err := github.New(cfg)
-```
-
-Supported environment variables:
-
-| Variable | Fallback | Description |
-|----------|----------|-------------|
-| `OMNISTORAGE_GITHUB_OWNER` | `GITHUB_OWNER` | Repository owner |
-| `OMNISTORAGE_GITHUB_REPO` | `GITHUB_REPO` | Repository name |
-| `OMNISTORAGE_GITHUB_BRANCH` | - | Branch name (default: "main") |
-| `OMNISTORAGE_GITHUB_TOKEN` | `GITHUB_TOKEN` | Personal access token |
-| `OMNISTORAGE_GITHUB_BASE_URL` | `GITHUB_API_URL` | API base URL |
-| `OMNISTORAGE_GITHUB_UPLOAD_URL` | - | Upload URL |
-| `OMNISTORAGE_GITHUB_COMMIT_MESSAGE` | - | Commit message template |
-| `OMNISTORAGE_GITHUB_COMMIT_AUTHOR_NAME` | - | Commit author name |
-| `OMNISTORAGE_GITHUB_COMMIT_AUTHOR_EMAIL` | - | Commit author email |
-
-## Supported Operations
-
-| Operation | Supported | Notes |
-|-----------|-----------|-------|
-| `NewReader` | Yes | Reads file content via Contents API |
-| `NewWriter` | Yes | Creates/updates files (each write = 1 commit) |
-| `NewBatch` | Yes | Atomic multi-file commits via Git Trees API |
-| `Exists` | Yes | Checks if file/directory exists |
-| `Delete` | Yes | Deletes files (each delete = 1 commit) |
-| `List` | Yes | Lists files via Trees API |
-| `Stat` | Yes | Returns size and SHA1 hash |
-| `Copy` | No | Returns `ErrNotSupported` |
-| `Move` | No | Returns `ErrNotSupported` |
-| `Mkdir` | No | Returns `ErrNotSupported` (directories are implicit) |
-| `Rmdir` | No | Returns `ErrNotSupported` (directories are implicit) |
-
-## Limitations
-
-- **File size**: GitHub Contents API only supports files up to 1MB. Larger files require the Git Blobs API (not yet implemented).
-- **Rate limits**: GitHub API has rate limits (5,000 requests/hour for authenticated users).
-- **Commits per write**: Each `NewWriter.Close()` creates a separate commit. For bulk operations, use `NewBatch()` to combine multiple operations into a single commit.
+- Go 1.26 or later
+- GitHub personal access token
 
 ## Related Projects
 
-- [omnistorage-core](https://github.com/plexusone/omnistorage-core) - Core storage abstraction library
-- [omni-aws](https://github.com/plexusone/omni-aws) - AWS S3 and Bedrock providers
+- [omnistorage-core](https://github.com/plexusone/omnistorage-core) - Storage abstraction
+- [omniskill](https://github.com/plexusone/omniskill) - Skill interface
+- [omniagent](https://github.com/plexusone/omniagent) - AI agent runtime
+- [omniagent-starter](https://github.com/plexusone/omniagent-starter) - Batteries-included bundle
 
 ## License
 
