@@ -6,6 +6,31 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.4.0",
+      "date": "2026-07-05",
+      "highlights": [
+        { "description": "New `omniskill/github/` package with GitHub skill for AI agents" },
+        { "description": "MkDocs documentation site with comprehensive guides" }
+      ],
+      "added": [
+        { "description": "GitHub skill (`omniskill/github/`) implementing `skill.Skill` interface", "commit": "315cda3" },
+        { "description": "10 tools: list_issues, get_issue, create_issue, update_issue, add_issue_comment, list_pull_requests, get_pull_request, add_pull_request_comment, search_code, search_issues", "commit": "315cda3" },
+        { "description": "GitHub Enterprise support for skill via `BaseURL` config", "commit": "315cda3" },
+        { "description": "Default owner/repo configuration for skill", "commit": "315cda3" }
+      ],
+      "documentation": [
+        { "description": "MkDocs site with Material theme and PlexusOne navigation", "commit": "8b04e56" },
+        { "description": "Storage provider documentation (overview, configuration, batch operations)", "commit": "8b04e56" },
+        { "description": "Skills documentation (overview, GitHub skill with tool reference)", "commit": "8b04e56" },
+        { "description": "Getting started guides (installation, quickstart)", "commit": "8b04e56" },
+        { "description": "Update README as landing page for both packages", "commit": "ea8eab5" },
+        { "description": "Update README shields", "commit": "786eede" }
+      ],
+      "dependencies": [
+        { "description": "Add `github.com/plexusone/omniskill` v0.10.0 for skill interface", "commit": "fb36903" }
+      ]
+    },
+    {
       "version": "v0.3.0",
       "date": "2026-04-25",
       "highlights": [
