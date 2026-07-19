@@ -6,6 +6,23 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.5.0",
+      "date": "2026-07-19",
+      "highlights": [
+        { "description": "New `omnidevx/` package collecting GitHub contribution data for the OmniDevX domain" }
+      ],
+      "added": [
+        { "description": "GitHub DevX collector (`omnidevx/`) implementing `omnidevx-core.Collector`", "commit": "6dfc996" },
+        { "description": "Maps GitHub profile and contribution-calendar data into canonical devx.* events (profile snapshot, contribution snapshot, contribution recorded)", "commit": "6dfc996" },
+        { "description": "REST and GraphQL client support via `github.com/google/go-github` and `github.com/shurcooL/githubv4`", "commit": "6dfc996" }
+      ],
+      "dependencies": [
+        { "description": "Upgrade `github.com/grokify/gogithub` to v0.14.0 (was v0.13.0)", "commit": "b9507dd" },
+        { "description": "Add `github.com/plexusone/omnidevx-core` v0.1.0", "commit": "b9507dd" },
+        { "description": "Add `github.com/shurcooL/githubv4` for GraphQL queries", "commit": "b9507dd" }
+      ]
+    },
+    {
       "version": "v0.4.0",
       "date": "2026-07-05",
       "highlights": [
