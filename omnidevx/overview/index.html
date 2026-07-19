@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://plexusone.github.io/omni-github/releases/v0.3.0/">
+        <link rel="canonical" href="https://plexusone.github.io/omni-github/omnidevx/overview/">
       
       
-        <link rel="prev" href="../v0.4.0/">
+        <link rel="prev" href="../../omniskill/github/">
       
       
-        <link rel="next" href="../v0.2.0/">
+        <link rel="next" href="../../releases/v0.5.0/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>v0.3.0 - Omni-GitHub</title>
+        <title>Overview - Omni-GitHub</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#release-notes-v030" class="md-skip">
+        <a href="#devx-collector-overview" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              v0.3.0
+              Overview
             
           </span>
         </div>
@@ -671,8 +671,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -683,13 +685,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
@@ -710,7 +710,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -725,10 +725,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../omnidevx/overview/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -744,6 +771,81 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#collecting-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Collecting Events
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#event-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Event Types
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#overlap-with-local-git-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overlap with Local Git History
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -787,8 +889,6 @@
       
   
   
-    
-  
   
   
     
@@ -801,11 +901,13 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
         
           
           <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
@@ -826,7 +928,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             
@@ -844,7 +946,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../v0.5.0/" class="md-nav__link">
+      <a href="../../releases/v0.5.0/" class="md-nav__link">
         
   
   
@@ -872,7 +974,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../v0.4.0/" class="md-nav__link">
+      <a href="../../releases/v0.4.0/" class="md-nav__link">
         
   
   
@@ -897,37 +999,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    v0.3.0
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../releases/v0.3.0/" class="md-nav__link">
         
   
   
@@ -943,170 +1018,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Overview
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Installation
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#highlights" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Highlights
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#whats-new" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What's New
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="What&#39;s New">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#github-skill-omniskillgithub" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        GitHub Skill (omniskill/github/)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="GitHub Skill (omniskill/github/)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#available-tools" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Available Tools
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#documentation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Documentation
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#package-structure" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Package Structure
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#dependencies" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Dependencies
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#migration" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Migration
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#contributors" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Contributors
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#links" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Links
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1119,7 +1030,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../v0.2.0/" class="md-nav__link">
+      <a href="../../releases/v0.2.0/" class="md-nav__link">
         
   
   
@@ -1147,7 +1058,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../v0.1.0/" class="md-nav__link">
+      <a href="../../releases/v0.1.0/" class="md-nav__link">
         
   
   
@@ -1202,10 +1113,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
+  <a href="#configuration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Overview
+        Configuration
       
     </span>
   </a>
@@ -1213,10 +1124,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
+  <a href="#collecting-events" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installation
+        Collecting Events
       
     </span>
   </a>
@@ -1224,10 +1135,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#highlights" class="md-nav__link">
+  <a href="#event-types" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Highlights
+        Event Types
       
     </span>
   </a>
@@ -1235,66 +1146,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#whats-new" class="md-nav__link">
+  <a href="#overlap-with-local-git-history" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What's New
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="What&#39;s New">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#github-skill-omniskillgithub" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        GitHub Skill (omniskill/github/)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="GitHub Skill (omniskill/github/)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#available-tools" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Available Tools
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#documentation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Documentation
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#package-structure" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Package Structure
+        Overlap with Local Git History
       
     </span>
   </a>
@@ -1302,43 +1157,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#dependencies" class="md-nav__link">
+  <a href="#architecture" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Dependencies
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#migration" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Migration
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#contributors" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Contributors
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#links" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Links
+        Architecture
       
     </span>
   </a>
@@ -1365,112 +1187,86 @@
   
 
 
-<h1 id="release-notes-v030">Release Notes - v0.3.0<a class="headerlink" href="#release-notes-v030" title="Permanent link">&para;</a></h1>
-<p><strong>Release Date:</strong> 2026-07-05</p>
-<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>This release adds the <code>omniskill/</code> package with GitHub skills for AI agents, complementing the existing storage provider functionality.</p>
-<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>go<span class="w"> </span>get<span class="w"> </span>github.com/plexusone/omni-github@v0.3.0
+<h1 id="devx-collector-overview">DevX Collector Overview<a class="headerlink" href="#devx-collector-overview" title="Permanent link">&para;</a></h1>
+<p>The <code>omnidevx/</code> package collects developer-experience events from GitHub for the OmniDevX domain (<a href="https://github.com/plexusone/omnidevx-core"><code>omnidevx-core</code></a>), following the omni-github per-domain package convention alongside <code>omnistorage</code> and <code>omniskill</code>.</p>
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/plexusone/omni-github/omnidevx&quot;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nx">collector</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">omnidevx</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="nx">omnidevx</span><span class="p">.</span><span class="nx">Config</span><span class="p">{</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nx">Token</span><span class="p">:</span><span class="w">    </span><span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;GITHUB_TOKEN&quot;</span><span class="p">),</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nx">Username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;octocat&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">})</span>
 </code></pre></div>
-<p>Requires Go 1.26+ and omniskill v0.10.0+.</p>
-<h2 id="highlights">Highlights<a class="headerlink" href="#highlights" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>New <code>omniskill/github/</code> package</strong> - GitHub skill for AI agents</li>
-<li><strong>10 tools</strong> for issues, pull requests, and code search</li>
-<li><strong>MkDocs documentation site</strong> with comprehensive guides</li>
-</ul>
-<h2 id="whats-new">What's New<a class="headerlink" href="#whats-new" title="Permanent link">&para;</a></h2>
-<h3 id="github-skill-omniskillgithub">GitHub Skill (<code>omniskill/github/</code>)<a class="headerlink" href="#github-skill-omniskillgithub" title="Permanent link">&para;</a></h3>
-<p>A new skill package providing tools for AI agents to interact with GitHub:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/plexusone/omni-github/omniskill/github&quot;</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nx">skill</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">github</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="nx">github</span><span class="p">.</span><span class="nx">Config</span><span class="p">{</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nx">Token</span><span class="p">:</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;GITHUB_TOKEN&quot;</span><span class="p">),</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">})</span>
-</code></pre></div>
-<h4 id="available-tools">Available Tools<a class="headerlink" href="#available-tools" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
-<th>Tool</th>
+<th>Field</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>list_issues</code></td>
-<td>List issues in a repository</td>
+<td><code>Token</code></td>
+<td>GitHub API token. Required unless both clients are set.</td>
 </tr>
 <tr>
-<td><code>get_issue</code></td>
-<td>Get issue details</td>
+<td><code>Username</code></td>
+<td>GitHub account whose contributions are collected. Required.</td>
 </tr>
 <tr>
-<td><code>create_issue</code></td>
-<td>Create a new issue</td>
+<td><code>RESTClient</code></td>
+<td>Overrides the token-derived REST client (for testing or custom transports).</td>
 </tr>
 <tr>
-<td><code>update_issue</code></td>
-<td>Update an existing issue</td>
-</tr>
-<tr>
-<td><code>add_issue_comment</code></td>
-<td>Add a comment to an issue</td>
-</tr>
-<tr>
-<td><code>list_pull_requests</code></td>
-<td>List pull requests</td>
-</tr>
-<tr>
-<td><code>get_pull_request</code></td>
-<td>Get PR details</td>
-</tr>
-<tr>
-<td><code>add_pull_request_comment</code></td>
-<td>Add a comment to a PR</td>
-</tr>
-<tr>
-<td><code>search_code</code></td>
-<td>Search code across repositories</td>
-</tr>
-<tr>
-<td><code>search_issues</code></td>
-<td>Search issues and PRs</td>
+<td><code>GraphQLClient</code></td>
+<td>Overrides the token-derived GraphQL client.</td>
 </tr>
 </tbody>
 </table>
-<h3 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h3>
-<ul>
-<li>MkDocs site with Material theme</li>
-<li>Separate guides for storage provider and skills</li>
-<li>Complete tool reference with parameters</li>
-</ul>
-<h2 id="package-structure">Package Structure<a class="headerlink" href="#package-structure" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>omni-github/
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├── omnistorage/         # Storage provider (existing)
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│   └── ...
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>└── omniskill/           # NEW: Skills for AI agents
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    └── github/
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>        ├── github.go
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>        └── github_test.go
+<h2 id="collecting-events">Collecting Events<a class="headerlink" href="#collecting-events" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nx">result</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">collector</span><span class="p">.</span><span class="nx">Collect</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">core</span><span class="p">.</span><span class="nx">CollectRequest</span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nx">Subject</span><span class="p">:</span><span class="w"> </span><span class="nx">core</span><span class="p">.</span><span class="nx">SubjectRef</span><span class="p">{</span><span class="nx">PersonID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;person:octocat&quot;</span><span class="p">},</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nx">Period</span><span class="p">:</span><span class="w"> </span><span class="nx">core</span><span class="p">.</span><span class="nx">Period</span><span class="p">{</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">        </span><span class="nx">Start</span><span class="p">:</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">UTC</span><span class="p">),</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">        </span><span class="nx">End</span><span class="p">:</span><span class="w">   </span><span class="nx">time</span><span class="p">.</span><span class="nx">Date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">UTC</span><span class="p">),</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">})</span>
 </code></pre></div>
-<h2 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Add <code>github.com/plexusone/omniskill</code> v0.10.0</li>
-</ul>
-<h2 id="migration">Migration<a class="headerlink" href="#migration" title="Permanent link">&para;</a></h2>
-<p>No breaking changes. The new <code>omniskill/</code> package is additive.</p>
-<h2 id="contributors">Contributors<a class="headerlink" href="#contributors" title="Permanent link">&para;</a></h2>
-<ul>
-<li>John Wang</li>
-<li>Claude Opus 4.5</li>
-</ul>
-<h2 id="links">Links<a class="headerlink" href="#links" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="https://github.com/plexusone/omni-github">GitHub Repository</a></li>
-<li><a href="https://plexusone.github.io/omni-github">Documentation</a></li>
-<li><a href="https://pkg.go.dev/github.com/plexusone/omni-github">Go Package</a></li>
-</ul>
+<p><code>Collect</code> requires a bounded period (both <code>Start</code> and <code>End</code> set) — GitHub's contribution query needs an explicit range, and unbounded scans of account history are rarely intended.</p>
+<h2 id="event-types">Event Types<a class="headerlink" href="#event-types" title="Permanent link">&para;</a></h2>
+<p>Contribution data comes from <a href="https://github.com/grokify/gogithub"><code>gogithub/profile</code></a> (GraphQL contribution calendar and per-repository commit statistics), normalized into canonical <code>devx.*</code> events:</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>devx.profile.snapshot</code></td>
+<td>Whole-profile period totals: commits, PRs, issues, reviews, repos created, repos contributed to, insertions, deletions</td>
+</tr>
+<tr>
+<td><code>devx.contribution.snapshot</code></td>
+<td>Per-repository period totals: commits, insertions, deletions, releases, private-repo flag</td>
+</tr>
+<tr>
+<td><code>devx.contribution.recorded</code></td>
+<td>Daily contribution-calendar counts (zero-count days are skipped)</td>
+</tr>
+</tbody>
+</table>
+<p>All events carry API-mode provenance (<code>core.ModeAPI</code>) since they're observed from the live GitHub API rather than reconstructed from local git history.</p>
+<h2 id="overlap-with-local-git-history">Overlap with Local Git History<a class="headerlink" href="#overlap-with-local-git-history" title="Permanent link">&para;</a></h2>
+<p>GitHub-reported contributions overlap with locally-collected git commits (e.g. the <code>providers/git</code> collector in <code>omnidevx-core</code>). The aggregation layer keeps the two sources separate via <code>bySource</code> metrics rather than summing them, since GitHub's counting rules (default branches, squash merges, private-repo restrictions) differ from local git history.</p>
+<h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>omni-github/
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├── omnistorage/         # Storage provider
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>├── omniskill/
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│   └── github/          # GitHub skill for AI agents
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>└── omnidevx/             # GitHub DevX collector (current)
+</code></pre></div>
 
 
 

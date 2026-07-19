@@ -2,50 +2,58 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://plexusone.github.io/omni-github/</loc>
-         <lastmod>2026-07-05</lastmod>
+         <lastmod>2026-07-19</lastmod>
     </url>
     <url>
          <loc>https://plexusone.github.io/omni-github/getting-started/installation/</loc>
-         <lastmod>2026-07-05</lastmod>
+         <lastmod>2026-07-19</lastmod>
     </url>
     <url>
          <loc>https://plexusone.github.io/omni-github/getting-started/quickstart/</loc>
-         <lastmod>2026-07-05</lastmod>
+         <lastmod>2026-07-19</lastmod>
+    </url>
+    <url>
+         <loc>https://plexusone.github.io/omni-github/omnidevx/overview/</loc>
+         <lastmod>2026-07-19</lastmod>
     </url>
     <url>
          <loc>https://plexusone.github.io/omni-github/omniskill/github/</loc>
-         <lastmod>2026-07-05</lastmod>
+         <lastmod>2026-07-19</lastmod>
     </url>
     <url>
          <loc>https://plexusone.github.io/omni-github/omniskill/overview/</loc>
-         <lastmod>2026-07-05</lastmod>
+         <lastmod>2026-07-19</lastmod>
     </url>
     <url>
          <loc>https://plexusone.github.io/omni-github/omnistorage/batch-operations/</loc>
-         <lastmod>2026-07-05</lastmod>
+         <lastmod>2026-07-19</lastmod>
     </url>
     <url>
          <loc>https://plexusone.github.io/omni-github/omnistorage/configuration/</loc>
-         <lastmod>2026-07-05</lastmod>
+         <lastmod>2026-07-19</lastmod>
     </url>
     <url>
          <loc>https://plexusone.github.io/omni-github/omnistorage/overview/</loc>
-         <lastmod>2026-07-05</lastmod>
+         <lastmod>2026-07-19</lastmod>
     </url>
     <url>
          <loc>https://plexusone.github.io/omni-github/releases/v0.1.0/</loc>
-         <lastmod>2026-07-05</lastmod>
+         <lastmod>2026-07-19</lastmod>
     </url>
     <url>
          <loc>https://plexusone.github.io/omni-github/releases/v0.2.0/</loc>
-         <lastmod>2026-07-05</lastmod>
+         <lastmod>2026-07-19</lastmod>
     </url>
     <url>
          <loc>https://plexusone.github.io/omni-github/releases/v0.3.0/</loc>
-         <lastmod>2026-07-05</lastmod>
+         <lastmod>2026-07-19</lastmod>
     </url>
     <url>
          <loc>https://plexusone.github.io/omni-github/releases/v0.4.0/</loc>
-         <lastmod>2026-07-05</lastmod>
+         <lastmod>2026-07-19</lastmod>
+    </url>
+    <url>
+         <loc>https://plexusone.github.io/omni-github/releases/v0.5.0/</loc>
+         <lastmod>2026-07-19</lastmod>
     </url>
 </urlset>
