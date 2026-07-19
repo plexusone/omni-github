@@ -31,6 +31,7 @@ GitHub providers and skills for the PlexusOne ecosystem.
 |---------|-------------|---------------|
 | `omnistorage/` | GitHub as storage backend | [Guide](https://plexusone.github.io/omni-github/omnistorage/overview/) |
 | `omniskill/github/` | GitHub skill for AI agents | [Guide](https://plexusone.github.io/omni-github/omniskill/github/) |
+| `omnidevx/` | GitHub DevX contribution collector | [Guide](https://plexusone.github.io/omni-github/omnidevx/overview/) |
 
 ## Installation
 
@@ -82,6 +83,22 @@ skill.Init(ctx)
 agent.RegisterSkill(skill)
 ```
 
+### DevX Collector
+
+```go
+import "github.com/plexusone/omni-github/omnidevx"
+
+collector, err := omnidevx.New(omnidevx.Config{
+    Token:    os.Getenv("GITHUB_TOKEN"),
+    Username: "octocat",
+})
+
+result, err := collector.Collect(ctx, core.CollectRequest{
+    Subject: core.SubjectRef{PersonID: "person:octocat"},
+    Period:  core.Period{Start: periodStart, End: periodEnd},
+})
+```
+
 ## Features
 
 ### Storage Provider
@@ -98,6 +115,12 @@ agent.RegisterSkill(skill)
 - 🔍 Code and issue search
 - 🏢 GitHub Enterprise support
 
+### DevX Collector
+
+- 📊 Profile, per-repository, and daily contribution snapshots
+- 🔄 Canonical `devx.*` events for the OmniDevX domain
+- 🧮 REST + GraphQL via `go-github` and `githubv4`
+
 ## Documentation
 
 Full documentation at [plexusone.github.io/omni-github](https://plexusone.github.io/omni-github)
@@ -106,6 +129,7 @@ Full documentation at [plexusone.github.io/omni-github](https://plexusone.github
 - [Quick Start](https://plexusone.github.io/omni-github/getting-started/quickstart/)
 - [Storage Provider](https://plexusone.github.io/omni-github/omnistorage/overview/)
 - [GitHub Skill](https://plexusone.github.io/omni-github/omniskill/github/)
+- [DevX Collector](https://plexusone.github.io/omni-github/omnidevx/overview/)
 
 ## Requirements
 
@@ -116,6 +140,7 @@ Full documentation at [plexusone.github.io/omni-github](https://plexusone.github
 
 - [omnistorage-core](https://github.com/plexusone/omnistorage-core) - Storage abstraction
 - [omniskill](https://github.com/plexusone/omniskill) - Skill interface
+- [omnidevx-core](https://github.com/plexusone/omnidevx-core) - DevX event domain
 - [omniagent](https://github.com/plexusone/omniagent) - AI agent runtime
 - [omniagent-starter](https://github.com/plexusone/omniagent-starter) - Batteries-included bundle
 
