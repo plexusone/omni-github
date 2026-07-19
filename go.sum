@@ -1,3 +1,5 @@
+github.com/golang-jwt/jwt/v5 v5.3.1 h1:kYf81DTWFe7t+1VvL7eS+jKFVWaUnK9cB1qbwn63YCY=
+github.com/golang-jwt/jwt/v5 v5.3.1/go.mod h1:fxCRLWMO43lRc8nhHWY6LGqRcf+1gQWArsqaEUEa5bE=
 github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 github.com/google/go-cmp v0.7.0 h1:wk8382ETsv4JYUZwIsn6YpYiWiBsYLSJiTsyBybVuN8=
 github.com/google/go-cmp v0.7.0/go.mod h1:pXiqmnSA92OHEEa9HXL2W4E7lf9JzCmGVUdgjX3N/iU=
@@ -5,11 +7,17 @@ github.com/google/go-github/v88 v88.0.0 h1:dZA9IKkPK1eXZj4ypngnpRj5FwdpTv4whix2P
 github.com/google/go-github/v88 v88.0.0/go.mod h1:rufTDgn2N45wjhukLTyxmvc9nilSp3mr3Rgtt6b1MPw=
 github.com/google/go-querystring v1.2.0 h1:yhqkPbu2/OH+V9BfpCVPZkNmUXhb2gBxJArfhIxNtP0=
 github.com/google/go-querystring v1.2.0/go.mod h1:8IFJqpSRITyJ8QhQ13bmbeMBDfmeEJZD5A0egEOmkqU=
-github.com/grokify/gogithub v0.13.0 h1:zB5BLDyi/2U4YlsMr5s42/BvPVtwvLVVdZ1AEyxAccc=
-github.com/grokify/gogithub v0.13.0/go.mod h1:fWRKNAoPfMWlhpf40vt+33PUzWj/+hnZyu/5FR9dG6M=
+github.com/grokify/gogithub v0.14.0 h1:p1lLcOMsN2BsXF9JWg3Zz+sp0B0fsZhmFDRjlTsTSks=
+github.com/grokify/gogithub v0.14.0/go.mod h1:At/GqPjhN1Te1fyqxzbgN28jDOIJbPhS0qttDatsvNs=
+github.com/plexusone/omnidevx-core v0.1.0 h1:dIwrtz0g3I2jOz4B01XVTkhwTwUEHw3PoCeI2yE47L0=
+github.com/plexusone/omnidevx-core v0.1.0/go.mod h1:8DvoAtycMKcdv2iUSlwBrfQ1DU4BhPrcj4nTzk9iF+4=
 github.com/plexusone/omniskill v0.10.0 h1:Nd/zfAGPNmnmRGyBhmMgXFS7lYcWbPtrT0k5cP8eOvY=
 github.com/plexusone/omniskill v0.10.0/go.mod h1:L0MW5av6S0EkgGByFMwDmTJBy/7h8ourBmQ5xxM2vQI=
 github.com/plexusone/omnistorage-core v0.5.0 h1:gORFoef2hysWTbn2/ndWoAQFsL0PRG6pSxNvTdAnPMI=
 github.com/plexusone/omnistorage-core v0.5.0/go.mod h1:YIUrTHj75Z8lSSRE/4ZaLF+DZvLQJGC2OU0ctjPfg8Y=
+github.com/shurcooL/githubv4 v0.0.0-20260209031235-2402fdf4a9ed h1:KT7hI8vYXgU0s2qaMkrfq9tCA1w/iEPgfredVP+4Tzw=
+github.com/shurcooL/githubv4 v0.0.0-20260209031235-2402fdf4a9ed/go.mod h1:zqMwyHmnN/eDOZOdiTohqIUKUrTFX62PNlu7IJdu0q8=
+github.com/shurcooL/graphql v0.0.0-20240915155400-7ee5256398cf h1:o1uxfymjZ7jZ4MsgCErcwWGtVKSiNAXtS59Lhs6uI/g=
+github.com/shurcooL/graphql v0.0.0-20240915155400-7ee5256398cf/go.mod h1:9dIRpgIY7hVhoqfe0/FcYp0bpInZaT7dc3BYOprrIUE=
 golang.org/x/oauth2 v0.36.0 h1:peZ/1z27fi9hUOFCAZaHyrpWG5lwe0RJEEEeH0ThlIs=
 golang.org/x/oauth2 v0.36.0/go.mod h1:YDBUJMTkDnJS+A4BP4eZBjCqtokkg1hODuPjwiGPO7Q=
