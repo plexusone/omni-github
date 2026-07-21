@@ -9,8 +9,8 @@ github.com/google/go-querystring v1.2.0 h1:yhqkPbu2/OH+V9BfpCVPZkNmUXhb2gBxJArfh
 github.com/google/go-querystring v1.2.0/go.mod h1:8IFJqpSRITyJ8QhQ13bmbeMBDfmeEJZD5A0egEOmkqU=
 github.com/grokify/gogithub v0.14.0 h1:p1lLcOMsN2BsXF9JWg3Zz+sp0B0fsZhmFDRjlTsTSks=
 github.com/grokify/gogithub v0.14.0/go.mod h1:At/GqPjhN1Te1fyqxzbgN28jDOIJbPhS0qttDatsvNs=
-github.com/plexusone/omnidevx-core v0.1.0 h1:dIwrtz0g3I2jOz4B01XVTkhwTwUEHw3PoCeI2yE47L0=
-github.com/plexusone/omnidevx-core v0.1.0/go.mod h1:8DvoAtycMKcdv2iUSlwBrfQ1DU4BhPrcj4nTzk9iF+4=
+github.com/plexusone/omnidevx-core v0.2.0 h1:p80OdnCR59udMwaizlNuGG8WJ755kFp8+Mvvmpatrv4=
+github.com/plexusone/omnidevx-core v0.2.0/go.mod h1:8DvoAtycMKcdv2iUSlwBrfQ1DU4BhPrcj4nTzk9iF+4=
 github.com/plexusone/omniskill v0.10.0 h1:Nd/zfAGPNmnmRGyBhmMgXFS7lYcWbPtrT0k5cP8eOvY=
 github.com/plexusone/omniskill v0.10.0/go.mod h1:L0MW5av6S0EkgGByFMwDmTJBy/7h8ourBmQ5xxM2vQI=
 github.com/plexusone/omnistorage-core v0.5.0 h1:gORFoef2hysWTbn2/ndWoAQFsL0PRG6pSxNvTdAnPMI=
