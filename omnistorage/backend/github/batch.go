@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/google/go-github/v88/github"
+	"github.com/grokify/gogithub/clientv1"
 	"github.com/grokify/gogithub/pathutil"
 	omnistorage "github.com/plexusone/omnistorage-core/object"
 )
@@ -154,31 +154,29 @@ func (batch *Batch) Commit() error {
 		return nil // Nothing to commit
 	}
 
+	client := batch.backend.client
+	owner := batch.backend.config.Owner
+	repo := batch.backend.config.Repo
+	branch := batch.backend.config.Branch
+
 	// Step 1: Get the current branch reference
-	ref, resp, err := batch.backend.client.Git.GetRef(
-		batch.ctx,
-		batch.backend.config.Owner,
-		batch.backend.config.Repo,
-		"refs/heads/"+batch.backend.config.Branch,
-	)
+	ref, err := client.GetRef(batch.ctx, owner, repo, "refs/heads/"+branch)
 	if err != nil {
-		return batch.backend.translateError(err, resp)
+		return batch.backend.translateError(err)
 	}
 
-	currentCommitSHA := ref.Object.GetSHA()
+	currentCommitSHA := ref.SHA
 
 	// Step 2: Get the current commit to find the tree SHA
-	currentCommit, resp, err := batch.backend.client.Git.GetCommit(
-		batch.ctx,
-		batch.backend.config.Owner,
-		batch.backend.config.Repo,
-		currentCommitSHA,
-	)
+	currentCommit, err := client.GetCommit(batch.ctx, owner, repo, currentCommitSHA)
 	if err != nil {
-		return batch.backend.translateError(err, resp)
+		return batch.backend.translateError(err)
 	}
 
-	baseTreeSHA := currentCommit.Tree.GetSHA()
+	if currentCommit.Tree == nil {
+		return fmt.Errorf("github: commit %s has no tree", currentCommitSHA)
+	}
+	baseTreeSHA := currentCommit.Tree.SHA
 
 	// Step 3: Build tree entries for all operations
 	treeEntries, err := batch.buildTreeEntries()
@@ -187,108 +185,77 @@ func (batch *Batch) Commit() error {
 	}
 
 	// Step 4: Create the new tree
-	newTree, resp, err := batch.backend.client.Git.CreateTree(
-		batch.ctx,
-		batch.backend.config.Owner,
-		batch.backend.config.Repo,
-		baseTreeSHA,
-		treeEntries,
-	)
+	newTreeSHA, err := client.CreateTree(batch.ctx, owner, repo, baseTreeSHA, treeEntries)
 	if err != nil {
-		return batch.backend.translateError(err, resp)
+		return batch.backend.translateError(err)
 	}
 
 	// Step 5: Create the new commit
-	commitOpts := github.Commit{
-		Message: github.Ptr(batch.message),
-		Tree:    newTree,
-		Parents: []*github.Commit{{SHA: github.Ptr(currentCommitSHA)}},
+	commitOpts := &clientv1.CreateCommitOptions{
+		Message: batch.message,
+		Tree:    newTreeSHA,
+		Parents: []string{currentCommitSHA},
 	}
-
-	// Set commit author if configured
 	if batch.backend.config.CommitAuthor != nil {
-		commitOpts.Author = &github.CommitAuthor{
-			Name:  github.Ptr(batch.backend.config.CommitAuthor.Name),
-			Email: github.Ptr(batch.backend.config.CommitAuthor.Email),
+		commitOpts.Author = &clientv1.CommitAuthor{
+			Name:  batch.backend.config.CommitAuthor.Name,
+			Email: batch.backend.config.CommitAuthor.Email,
 		}
 	}
 
-	newCommit, resp, err := batch.backend.client.Git.CreateCommit(
-		batch.ctx,
-		batch.backend.config.Owner,
-		batch.backend.config.Repo,
-		commitOpts,
-		nil, // CreateCommitOptions
-	)
+	newCommit, err := client.CreateCommit(batch.ctx, owner, repo, commitOpts)
 	if err != nil {
-		return batch.backend.translateError(err, resp)
+		return batch.backend.translateError(err)
 	}
 
 	// Step 6: Update the branch reference
-	newCommitSHA := newCommit.GetSHA()
-	updateRef := github.UpdateRef{
-		SHA:   newCommitSHA,
-		Force: github.Ptr(false),
-	}
-
-	_, resp, err = batch.backend.client.Git.UpdateRef(
-		batch.ctx,
-		batch.backend.config.Owner,
-		batch.backend.config.Repo,
-		ref.GetRef(),
-		updateRef,
-	)
+	_, err = client.UpdateRef(batch.ctx, owner, repo, ref.Ref, newCommit.SHA, false)
 	if err != nil {
-		return batch.backend.translateError(err, resp)
+		return batch.backend.translateError(err)
 	}
 
 	batch.committed = true
 	return nil
 }
 
-// buildTreeEntries creates GitHub tree entries for all operations.
-func (batch *Batch) buildTreeEntries() ([]*github.TreeEntry, error) {
-	entries := make([]*github.TreeEntry, 0, len(batch.operations))
+// buildTreeEntries creates git tree entries for all operations.
+func (batch *Batch) buildTreeEntries() ([]clientv1.TreeEntry, error) {
+	client := batch.backend.client
+	owner := batch.backend.config.Owner
+	repo := batch.backend.config.Repo
+
+	entries := make([]clientv1.TreeEntry, 0, len(batch.operations))
 
 	for _, op := range batch.operations {
 		switch op.Type {
 		case BatchOpWrite:
 			// Create a blob for the content
-			blob, resp, err := batch.backend.client.Git.CreateBlob(
-				batch.ctx,
-				batch.backend.config.Owner,
-				batch.backend.config.Repo,
-				github.Blob{
-					Content:  github.Ptr(string(op.Content)),
-					Encoding: github.Ptr("utf-8"),
-				},
-			)
+			blobSHA, err := client.CreateBlob(batch.ctx, owner, repo, op.Content, "utf-8")
 			if err != nil {
-				return nil, batch.backend.translateError(err, resp)
+				return nil, batch.backend.translateError(err)
 			}
 
-			entries = append(entries, &github.TreeEntry{
-				Path: github.Ptr(op.Path),
-				Mode: github.Ptr("100644"), // Regular file
-				Type: github.Ptr("blob"),
-				SHA:  blob.SHA,
+			entries = append(entries, clientv1.TreeEntry{
+				Path: op.Path,
+				Mode: "100644", // Regular file
+				Type: "blob",
+				SHA:  blobSHA,
 			})
 
 		case BatchOpDelete:
-			// To delete a file, we set SHA to nil (or omit it) with the path
-			// The GitHub API interprets this as a deletion when creating a tree
+			// To delete a file, we set SHA to empty with the path.
+			// The GitHub API interprets this as a deletion when creating a tree.
 			// We need to check if the file exists first
 			exists, err := batch.backend.Exists(batch.ctx, op.Path)
 			if err != nil {
 				return nil, err
 			}
 			if exists {
-				// Use a nil SHA to indicate deletion
-				entries = append(entries, &github.TreeEntry{
-					Path: github.Ptr(op.Path),
-					Mode: github.Ptr("100644"),
-					Type: github.Ptr("blob"),
-					SHA:  nil, // nil SHA means delete
+				// An empty SHA means delete
+				entries = append(entries, clientv1.TreeEntry{
+					Path: op.Path,
+					Mode: "100644",
+					Type: "blob",
 				})
 			}
 			// If file doesn't exist, skip it (idempotent)

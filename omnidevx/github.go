@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/google/go-github/v88/github"
+	"github.com/grokify/gogithub/clientv1"
 	"github.com/grokify/gogithub/profile"
 	core "github.com/plexusone/omnidevx-core"
 	"github.com/shurcooL/githubv4"
@@ -28,7 +28,7 @@ type Config struct {
 
 	// RESTClient overrides the token-derived REST client (for testing or
 	// custom transports).
-	RESTClient *github.Client
+	RESTClient clientv1.Client
 
 	// GraphQLClient overrides the token-derived GraphQL client.
 	GraphQLClient *githubv4.Client
@@ -37,7 +37,7 @@ type Config struct {
 // Collector reads GitHub contribution data via gogithub/profile.
 type Collector struct {
 	cfg  Config
-	rest *github.Client
+	rest clientv1.Client
 	gql  *githubv4.Client
 }
 
@@ -55,7 +55,7 @@ func New(cfg Config) (*Collector, error) {
 		}
 		if rest == nil {
 			var err error
-			rest, err = github.NewClient(github.WithAuthToken(cfg.Token))
+			rest, err = clientv1.NewClient(context.Background(), cfg.Token)
 			if err != nil {
 				return nil, fmt.Errorf("github: build REST client: %w", err)
 			}

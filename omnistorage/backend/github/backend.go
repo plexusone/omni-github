@@ -8,11 +8,11 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/google/go-github/v88/github"
+	"github.com/grokify/gogithub"
+	"github.com/grokify/gogithub/clientv1"
 	gherrors "github.com/grokify/gogithub/errors"
 	"github.com/grokify/gogithub/pathutil"
 	omnistorage "github.com/plexusone/omnistorage-core/object"
-	"golang.org/x/oauth2"
 )
 
 const backendName = "github"
@@ -26,7 +26,7 @@ func init() {
 
 // Backend implements omnistorage.ExtendedBackend for GitHub repositories.
 type Backend struct {
-	client *github.Client
+	client clientv1.Client
 	config Config
 	closed bool
 	mu     sync.RWMutex
@@ -59,20 +59,20 @@ func New(cfg Config) (*Backend, error) {
 		cfg.UploadURL = "https://uploads.github.com/"
 	}
 
-	// Create OAuth2 token source
-	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: cfg.Token},
-	)
-	tc := oauth2.NewClient(context.Background(), ts)
+	// Create clientv1.Client using options for GitHub Enterprise support
+	var client clientv1.Client
+	var err error
 
-	// Create GitHub client
-	opts := []github.ClientOptionsFunc{github.WithHTTPClient(tc)}
 	if cfg.BaseURL != "https://api.github.com/" {
 		// GitHub Enterprise
-		opts = append(opts, github.WithEnterpriseURLs(cfg.BaseURL, cfg.UploadURL))
+		client, err = clientv1.NewClientWithOptions(context.Background(), clientv1.ClientOptions{
+			Token:     cfg.Token,
+			BaseURL:   cfg.BaseURL,
+			UploadURL: cfg.UploadURL,
+		})
+	} else {
+		client, err = clientv1.NewClient(context.Background(), cfg.Token)
 	}
-
-	client, err := github.NewClient(opts...)
 	if err != nil {
 		return nil, fmt.Errorf("github: creating client: %w", err)
 	}
@@ -143,58 +143,49 @@ func (w *writer) Close() error {
 		return err
 	}
 
-	// Get existing file SHA if it exists (required for updates)
-	var existingSHA *string
-	fileContent, _, resp, err := w.backend.client.Repositories.GetContents(
-		w.ctx,
-		w.backend.config.Owner,
-		w.backend.config.Repo,
-		w.filePath,
-		&github.RepositoryContentGetOptions{
-			Ref: w.backend.config.Branch,
-		},
-	)
-	if err == nil && fileContent != nil {
-		sha := fileContent.GetSHA()
-		existingSHA = &sha
-	} else if resp != nil && resp.StatusCode != 404 {
-		// Only ignore 404 errors (file doesn't exist yet)
-		if errResp, ok := err.(*github.ErrorResponse); ok {
-			if errResp.Response == nil || errResp.Response.StatusCode != 404 {
-				return w.backend.translateError(err, resp)
-			}
-		} else {
-			return w.backend.translateError(err, resp)
-		}
-	}
+	// Get existing file SHA if it exists (required for updates). The error is
+	// ignored here: a lookup failure (e.g. file not found) is not fatal, it
+	// just means existingSHA stays empty and we fall through to file creation.
+	contentOpts := &gogithub.ContentOptions{Ref: w.backend.config.Branch}
+	_, existingSHA, _ := w.backend.client.GetFileContentWithSHA(w.ctx, w.backend.config.Owner, w.backend.config.Repo, w.filePath, contentOpts)
 
 	// Prepare commit options
 	commitMessage := w.backend.config.FormatCommitMessage(w.filePath)
-	opts := &github.RepositoryContentFileOptions{
-		Message: &commitMessage,
-		Content: w.buffer.Bytes(),
-		Branch:  &w.backend.config.Branch,
-		SHA:     existingSHA,
-	}
 
-	// Set commit author if configured
-	if w.backend.config.CommitAuthor != nil {
-		opts.Author = &github.CommitAuthor{
-			Name:  &w.backend.config.CommitAuthor.Name,
-			Email: &w.backend.config.CommitAuthor.Email,
+	var err error
+	if existingSHA != "" {
+		// Update existing file
+		updateOpts := &clientv1.UpdateFileOptions{
+			Content: w.buffer.Bytes(),
+			SHA:     existingSHA,
+			Message: commitMessage,
+			Branch:  w.backend.config.Branch,
 		}
+		if w.backend.config.CommitAuthor != nil {
+			updateOpts.Author = &clientv1.CommitAuthor{
+				Name:  w.backend.config.CommitAuthor.Name,
+				Email: w.backend.config.CommitAuthor.Email,
+			}
+		}
+		_, err = w.backend.client.UpdateFile(w.ctx, w.backend.config.Owner, w.backend.config.Repo, w.filePath, updateOpts)
+	} else {
+		// Create new file
+		createOpts := &clientv1.CreateFileOptions{
+			Content: w.buffer.Bytes(),
+			Message: commitMessage,
+			Branch:  w.backend.config.Branch,
+		}
+		if w.backend.config.CommitAuthor != nil {
+			createOpts.Author = &clientv1.CommitAuthor{
+				Name:  w.backend.config.CommitAuthor.Name,
+				Email: w.backend.config.CommitAuthor.Email,
+			}
+		}
+		_, err = w.backend.client.CreateFile(w.ctx, w.backend.config.Owner, w.backend.config.Repo, w.filePath, createOpts)
 	}
 
-	// Create or update the file
-	_, resp, err = w.backend.client.Repositories.CreateFile(
-		w.ctx,
-		w.backend.config.Owner,
-		w.backend.config.Repo,
-		w.filePath,
-		opts,
-	)
 	if err != nil {
-		return w.backend.translateError(err, resp)
+		return w.backend.translateError(err)
 	}
 
 	return nil
@@ -218,31 +209,11 @@ func (b *Backend) NewReader(ctx context.Context, filePath string, opts ...omnist
 	normalPath := pathutil.Normalize(filePath)
 
 	// Get file content from GitHub
-	fileContent, _, resp, err := b.client.Repositories.GetContents(
-		ctx,
-		b.config.Owner,
-		b.config.Repo,
-		normalPath,
-		&github.RepositoryContentGetOptions{
-			Ref: b.config.Branch,
-		},
-	)
+	contentOpts := &gogithub.ContentOptions{Ref: b.config.Branch}
+	data, err := b.client.GetFileContent(ctx, b.config.Owner, b.config.Repo, normalPath, contentOpts)
 	if err != nil {
-		return nil, b.translateError(err, resp)
+		return nil, b.translateError(err)
 	}
-
-	// Check if it's a file (not a directory)
-	if fileContent == nil || fileContent.GetType() != "file" {
-		return nil, fmt.Errorf("github: path is a directory: %s", filePath)
-	}
-
-	// Decode content using the go-github helper
-	content, err := fileContent.GetContent()
-	if err != nil {
-		return nil, fmt.Errorf("github: decoding content: %w", err)
-	}
-
-	data := []byte(content)
 
 	// Apply reader options
 	cfg := omnistorage.ApplyReaderOptions(opts...)
@@ -279,32 +250,14 @@ func (b *Backend) Exists(ctx context.Context, filePath string) (bool, error) {
 	}
 
 	normalPath := pathutil.Normalize(filePath)
+	contentOpts := &gogithub.ContentOptions{Ref: b.config.Branch}
 
-	_, _, resp, err := b.client.Repositories.GetContents(
-		ctx,
-		b.config.Owner,
-		b.config.Repo,
-		normalPath,
-		&github.RepositoryContentGetOptions{
-			Ref: b.config.Branch,
-		},
-	)
-
+	exists, err := b.client.FileExists(ctx, b.config.Owner, b.config.Repo, normalPath, contentOpts)
 	if err != nil {
-		// Check for 404
-		if resp != nil && resp.StatusCode == 404 {
-			return false, nil
-		}
-		// Check error type
-		if errResp, ok := err.(*github.ErrorResponse); ok {
-			if errResp.Response != nil && errResp.Response.StatusCode == 404 {
-				return false, nil
-			}
-		}
-		return false, b.translateError(err, resp)
+		return false, b.translateError(err)
 	}
 
-	return true, nil
+	return exists, nil
 }
 
 // Delete removes a file from the repository.
@@ -328,33 +281,16 @@ func (b *Backend) Delete(ctx context.Context, filePath string) error {
 	}
 
 	normalPath := pathutil.Normalize(filePath)
+	contentOpts := &gogithub.ContentOptions{Ref: b.config.Branch}
 
 	// Get existing file SHA (required for delete)
-	fileContent, _, resp, err := b.client.Repositories.GetContents(
-		ctx,
-		b.config.Owner,
-		b.config.Repo,
-		normalPath,
-		&github.RepositoryContentGetOptions{
-			Ref: b.config.Branch,
-		},
-	)
+	_, sha, err := b.client.GetFileContentWithSHA(ctx, b.config.Owner, b.config.Repo, normalPath, contentOpts)
 	if err != nil {
 		// If file doesn't exist, return nil (idempotent)
-		if resp != nil && resp.StatusCode == 404 {
+		if strings.Contains(err.Error(), "not found") {
 			return nil
 		}
-		if errResp, ok := err.(*github.ErrorResponse); ok {
-			if errResp.Response != nil && errResp.Response.StatusCode == 404 {
-				return nil
-			}
-		}
-		return b.translateError(err, resp)
-	}
-
-	if fileContent == nil {
-		// It's a directory, not a file
-		return fmt.Errorf("github: cannot delete directory: %s", filePath)
+		return b.translateError(err)
 	}
 
 	// Prepare delete options
@@ -364,38 +300,27 @@ func (b *Backend) Delete(ctx context.Context, filePath string) error {
 		commitMessage = strings.ReplaceAll(commitMessage, "Update", "Delete")
 	}
 
-	sha := fileContent.GetSHA()
-	opts := &github.RepositoryContentFileOptions{
-		Message: &commitMessage,
-		SHA:     &sha,
-		Branch:  &b.config.Branch,
+	deleteOpts := &clientv1.DeleteFileOptions{
+		Branch: b.config.Branch,
 	}
-
-	// Set commit author if configured
 	if b.config.CommitAuthor != nil {
-		opts.Author = &github.CommitAuthor{
-			Name:  &b.config.CommitAuthor.Name,
-			Email: &b.config.CommitAuthor.Email,
+		deleteOpts.Author = &clientv1.CommitAuthor{
+			Name:  b.config.CommitAuthor.Name,
+			Email: b.config.CommitAuthor.Email,
 		}
 	}
 
 	// Delete the file
-	_, resp, err = b.client.Repositories.DeleteFile(
-		ctx,
-		b.config.Owner,
-		b.config.Repo,
-		normalPath,
-		opts,
-	)
+	_, err = b.client.DeleteFile(ctx, b.config.Owner, b.config.Repo, normalPath, sha, commitMessage, deleteOpts)
 	if err != nil {
-		return b.translateError(err, resp)
+		return b.translateError(err)
 	}
 
 	return nil
 }
 
 // List lists paths with the given prefix.
-// Uses GitHub Trees API: GET /repos/{owner}/{repo}/git/trees/{branch}?recursive=1
+// Uses GitHub Trees API via clientv1.GetTree
 func (b *Backend) List(ctx context.Context, prefix string) ([]string, error) {
 	if err := b.checkClosed(); err != nil {
 		return nil, err
@@ -407,31 +332,31 @@ func (b *Backend) List(ctx context.Context, prefix string) ([]string, error) {
 
 	normalPrefix := pathutil.Normalize(prefix)
 
-	// Get the tree recursively
-	tree, resp, err := b.client.Git.GetTree(
-		ctx,
-		b.config.Owner,
-		b.config.Repo,
-		b.config.Branch,
-		true, // recursive
-	)
+	// Get branch SHA first
+	branchSHA, err := b.client.GetBranchSHA(ctx, b.config.Owner, b.config.Repo, b.config.Branch)
 	if err != nil {
-		return nil, b.translateError(err, resp)
+		return nil, b.translateError(err)
+	}
+
+	// Get the tree recursively
+	entries, err := b.client.GetTree(ctx, b.config.Owner, b.config.Repo, branchSHA, true)
+	if err != nil {
+		return nil, b.translateError(err)
 	}
 
 	var paths []string
-	for _, entry := range tree.Entries {
+	for _, entry := range entries {
 		// Check context on each iteration
 		if ctx.Err() != nil {
 			return nil, ctx.Err()
 		}
 
 		// Skip directories (type "tree"), only include files (type "blob")
-		if entry.GetType() != "blob" {
+		if entry.Type != "blob" {
 			continue
 		}
 
-		entryPath := entry.GetPath()
+		entryPath := entry.Path
 
 		// Filter by prefix
 		if normalPrefix != "" {
@@ -470,36 +395,30 @@ func (b *Backend) Stat(ctx context.Context, filePath string) (omnistorage.Object
 	}
 
 	normalPath := pathutil.Normalize(filePath)
+	contentOpts := &gogithub.ContentOptions{Ref: b.config.Branch}
 
-	fileContent, dirContents, resp, err := b.client.Repositories.GetContents(
-		ctx,
-		b.config.Owner,
-		b.config.Repo,
-		normalPath,
-		&github.RepositoryContentGetOptions{
-			Ref: b.config.Branch,
-		},
-	)
+	// Try to get file content first
+	content, sha, err := b.client.GetFileContentWithSHA(ctx, b.config.Owner, b.config.Repo, normalPath, contentOpts)
 	if err != nil {
-		return nil, b.translateError(err, resp)
-	}
-
-	// Check if it's a directory
-	if dirContents != nil {
-		return &omnistorage.BasicObjectInfo{
-			ObjectPath:  normalPath,
-			ObjectSize:  0,
-			ObjectIsDir: true,
-		}, nil
+		// Check if it's a directory by trying to list it
+		entries, listErr := b.client.ListDirectory(ctx, b.config.Owner, b.config.Repo, normalPath, contentOpts)
+		if listErr == nil && len(entries) > 0 {
+			return &omnistorage.BasicObjectInfo{
+				ObjectPath:  normalPath,
+				ObjectSize:  0,
+				ObjectIsDir: true,
+			}, nil
+		}
+		return nil, b.translateError(err)
 	}
 
 	// It's a file
 	return &omnistorage.BasicObjectInfo{
 		ObjectPath:  normalPath,
-		ObjectSize:  int64(fileContent.GetSize()),
+		ObjectSize:  int64(len(content)),
 		ObjectIsDir: false,
 		ObjectHashes: map[omnistorage.HashType]string{
-			omnistorage.HashSHA1: fileContent.GetSHA(),
+			omnistorage.HashSHA1: sha,
 		},
 	}, nil
 }
@@ -563,14 +482,14 @@ func (b *Backend) checkClosed() error {
 	return nil
 }
 
-// translateError converts GitHub API errors to omnistorage errors.
-func (b *Backend) translateError(err error, resp *github.Response) error {
+// translateError converts errors to omnistorage errors.
+func (b *Backend) translateError(err error) error {
 	if err == nil {
 		return nil
 	}
 
 	// Use gogithub's error translation
-	ghErr := gherrors.Translate(err, resp)
+	ghErr := gherrors.Translate(err, nil)
 
 	// Map gogithub errors to omnistorage errors
 	if gherrors.IsNotFound(ghErr) {
