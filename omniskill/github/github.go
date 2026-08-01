@@ -28,7 +28,8 @@ import (
 	"fmt"
 	"strings"
 
-	gh "github.com/google/go-github/v88/github"
+	"github.com/grokify/gogithub"
+	"github.com/grokify/gogithub/clientv1"
 	"github.com/plexusone/omniskill/skill"
 )
 
@@ -55,7 +56,7 @@ type Config struct {
 // Skill provides GitHub integration tools.
 type Skill struct {
 	config Config
-	client *gh.Client
+	client clientv1.Client
 }
 
 // New creates a new GitHub skill with the given configuration.
@@ -79,16 +80,16 @@ func (s *Skill) Init(ctx context.Context) error {
 		return fmt.Errorf("github: token is required")
 	}
 
-	// Create GitHub client with auth token
-	var opts []gh.ClientOptionsFunc
-	opts = append(opts, gh.WithAuthToken(s.config.Token))
-
-	// Add enterprise URLs if configured
+	var client clientv1.Client
+	var err error
 	if s.config.BaseURL != "" {
-		opts = append(opts, gh.WithEnterpriseURLs(s.config.BaseURL, s.config.BaseURL))
+		client, err = clientv1.NewClientWithOptions(ctx, clientv1.ClientOptions{
+			Token:   s.config.Token,
+			BaseURL: s.config.BaseURL,
+		})
+	} else {
+		client, err = clientv1.NewClient(ctx, s.config.Token)
 	}
-
-	client, err := gh.NewClient(opts...)
 	if err != nil {
 		return fmt.Errorf("github: create client: %w", err)
 	}
@@ -158,18 +159,16 @@ func (s *Skill) listIssuesTool() skill.Tool {
 				return nil, err
 			}
 
-			opts := &gh.IssueListByRepoOptions{
-				State: getString(params, "state", "open"),
-				ListOptions: gh.ListOptions{
-					PerPage: getInt(params, "per_page", 30),
-				},
+			opts := &clientv1.ListIssuesOptions{
+				State:   getString(params, "state", "open"),
+				PerPage: getInt(params, "per_page", 30),
 			}
 
-			if labels, ok := params["labels"].(string); ok && labels != "" {
+			if labels := getString(params, "labels", ""); labels != "" {
 				opts.Labels = strings.Split(labels, ",")
 			}
 
-			issues, _, err := s.client.Issues.ListByRepo(ctx, owner, repo, opts)
+			issues, err := s.client.ListIssues(ctx, owner, repo, opts)
 			if err != nil {
 				return nil, fmt.Errorf("list issues: %w", err)
 			}
@@ -200,7 +199,7 @@ func (s *Skill) getIssueTool() skill.Tool {
 				return nil, fmt.Errorf("issue number is required")
 			}
 
-			issue, _, err := s.client.Issues.Get(ctx, owner, repo, number)
+			issue, err := s.client.GetIssue(ctx, owner, repo, number)
 			if err != nil {
 				return nil, fmt.Errorf("get issue: %w", err)
 			}
@@ -234,25 +233,20 @@ func (s *Skill) createIssueTool() skill.Tool {
 				return nil, fmt.Errorf("title is required")
 			}
 
-			req := &gh.IssueRequest{
-				Title: &title,
-			}
-
-			if body := getString(params, "body", ""); body != "" {
-				req.Body = &body
+			input := &clientv1.CreateIssueInput{
+				Title: title,
+				Body:  getString(params, "body", ""),
 			}
 
 			if labels := getString(params, "labels", ""); labels != "" {
-				labelList := strings.Split(labels, ",")
-				req.Labels = &labelList
+				input.Labels = strings.Split(labels, ",")
 			}
 
 			if assignees := getString(params, "assignees", ""); assignees != "" {
-				assigneeList := strings.Split(assignees, ",")
-				req.Assignees = &assigneeList
+				input.Assignees = strings.Split(assignees, ",")
 			}
 
-			issue, _, err := s.client.Issues.Create(ctx, owner, repo, req)
+			issue, err := s.client.CreateIssue(ctx, owner, repo, input)
 			if err != nil {
 				return nil, fmt.Errorf("create issue: %w", err)
 			}
@@ -287,23 +281,22 @@ func (s *Skill) updateIssueTool() skill.Tool {
 				return nil, fmt.Errorf("issue number is required")
 			}
 
-			req := &gh.IssueRequest{}
+			input := &clientv1.UpdateIssueInput{}
 
 			if title := getString(params, "title", ""); title != "" {
-				req.Title = &title
+				input.Title = &title
 			}
 			if body := getString(params, "body", ""); body != "" {
-				req.Body = &body
+				input.Body = &body
 			}
 			if state := getString(params, "state", ""); state != "" {
-				req.State = &state
+				input.State = &state
 			}
 			if labels := getString(params, "labels", ""); labels != "" {
-				labelList := strings.Split(labels, ",")
-				req.Labels = &labelList
+				input.Labels = strings.Split(labels, ",")
 			}
 
-			issue, _, err := s.client.Issues.Edit(ctx, owner, repo, number, req)
+			issue, err := s.client.UpdateIssue(ctx, owner, repo, number, input)
 			if err != nil {
 				return nil, fmt.Errorf("update issue: %w", err)
 			}
@@ -327,19 +320,17 @@ func (s *Skill) addComment(ctx context.Context, params map[string]any, errPrefix
 		return nil, fmt.Errorf("number and body are required")
 	}
 
-	comment, _, err := s.client.Issues.CreateComment(ctx, owner, repo, number, &gh.IssueComment{
-		Body: &body,
-	})
+	comment, err := s.client.CreateIssueComment(ctx, owner, repo, number, body)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", errPrefix, err)
 	}
 
 	return map[string]any{
-		"id":         comment.GetID(),
-		"body":       comment.GetBody(),
-		"user":       comment.GetUser().GetLogin(),
-		"created_at": comment.GetCreatedAt().String(),
-		"html_url":   comment.GetHTMLURL(),
+		"id":         comment.ID,
+		"body":       comment.Body,
+		"user":       userLogin(comment.User),
+		"created_at": comment.CreatedAt.String(),
+		"html_url":   comment.HTMLURL,
 	}, nil
 }
 
@@ -379,16 +370,13 @@ func (s *Skill) listPullRequestsTool() skill.Tool {
 				return nil, err
 			}
 
-			opts := &gh.PullRequestListOptions{
+			opts := &clientv1.ListPullRequestsOptions{
 				State: getString(params, "state", "open"),
 				Base:  getString(params, "base", ""),
 				Head:  getString(params, "head", ""),
-				ListOptions: gh.ListOptions{
-					PerPage: getInt(params, "per_page", 30),
-				},
 			}
 
-			prs, _, err := s.client.PullRequests.List(ctx, owner, repo, opts)
+			prs, err := s.client.ListPullRequests(ctx, owner, repo, opts)
 			if err != nil {
 				return nil, fmt.Errorf("list pull requests: %w", err)
 			}
@@ -419,7 +407,7 @@ func (s *Skill) getPullRequestTool() skill.Tool {
 				return nil, fmt.Errorf("PR number is required")
 			}
 
-			pr, _, err := s.client.PullRequests.Get(ctx, owner, repo, number)
+			pr, err := s.client.GetPullRequest(ctx, owner, repo, number)
 			if err != nil {
 				return nil, fmt.Errorf("get pull request: %w", err)
 			}
@@ -430,7 +418,7 @@ func (s *Skill) getPullRequestTool() skill.Tool {
 }
 
 // addPullRequestCommentTool adds a comment to a pull request.
-// Note: Uses Issues.CreateComment since PR comments use the same API.
+// Note: Uses CreateIssueComment since PR comments use the same API.
 func (s *Skill) addPullRequestCommentTool() skill.Tool {
 	return skill.NewTool(
 		"add_pull_request_comment",
@@ -462,13 +450,11 @@ func (s *Skill) searchCodeTool() skill.Tool {
 				return nil, fmt.Errorf("query is required")
 			}
 
-			opts := &gh.SearchOptions{
-				ListOptions: gh.ListOptions{
-					PerPage: getInt(params, "per_page", 30),
-				},
+			opts := &clientv1.SearchOptions{
+				PerPage: getInt(params, "per_page", 30),
 			}
 
-			results, _, err := s.client.Search.Code(ctx, query, opts)
+			results, err := s.client.SearchCode(ctx, query, opts)
 			if err != nil {
 				return nil, fmt.Errorf("search code: %w", err)
 			}
@@ -493,13 +479,11 @@ func (s *Skill) searchIssuesTool() skill.Tool {
 				return nil, fmt.Errorf("query is required")
 			}
 
-			opts := &gh.SearchOptions{
-				ListOptions: gh.ListOptions{
-					PerPage: getInt(params, "per_page", 30),
-				},
+			opts := &clientv1.SearchOptions{
+				PerPage: getInt(params, "per_page", 30),
 			}
 
-			results, _, err := s.client.Search.Issues(ctx, query, opts)
+			results, err := s.client.SearchIssues(ctx, query, opts)
 			if err != nil {
 				return nil, fmt.Errorf("search issues: %w", err)
 			}
@@ -530,11 +514,32 @@ func getInt(params map[string]any, key string, defaultVal int) int {
 	return defaultVal
 }
 
-func formatIssues(issues []*gh.Issue) []map[string]any {
+func userLogin(u *gogithub.User) string {
+	if u == nil {
+		return ""
+	}
+	return u.Login
+}
+
+func branchRef(b *gogithub.PullRequestBranch) string {
+	if b == nil {
+		return ""
+	}
+	return b.Ref
+}
+
+func repoFullName(r *gogithub.Repository) string {
+	if r == nil {
+		return ""
+	}
+	return r.FullName
+}
+
+func formatIssues(issues []*gogithub.Issue) []map[string]any {
 	result := make([]map[string]any, 0, len(issues))
 	for _, issue := range issues {
 		// Skip pull requests (they appear in issue lists)
-		if issue.PullRequestLinks != nil {
+		if issue.IsPullRequest {
 			continue
 		}
 		result = append(result, formatIssue(issue))
@@ -542,33 +547,33 @@ func formatIssues(issues []*gh.Issue) []map[string]any {
 	return result
 }
 
-func formatIssue(issue *gh.Issue) map[string]any {
+func formatIssue(issue *gogithub.Issue) map[string]any {
 	labels := make([]string, 0, len(issue.Labels))
 	for _, label := range issue.Labels {
-		labels = append(labels, label.GetName())
+		labels = append(labels, label.Name)
 	}
 
 	assignees := make([]string, 0, len(issue.Assignees))
 	for _, assignee := range issue.Assignees {
-		assignees = append(assignees, assignee.GetLogin())
+		assignees = append(assignees, assignee.Login)
 	}
 
 	return map[string]any{
-		"number":     issue.GetNumber(),
-		"title":      issue.GetTitle(),
-		"state":      issue.GetState(),
-		"body":       issue.GetBody(),
-		"user":       issue.GetUser().GetLogin(),
+		"number":     issue.Number,
+		"title":      issue.Title,
+		"state":      issue.State,
+		"body":       issue.Body,
+		"user":       userLogin(issue.User),
 		"labels":     labels,
 		"assignees":  assignees,
-		"comments":   issue.GetComments(),
-		"created_at": issue.GetCreatedAt().String(),
-		"updated_at": issue.GetUpdatedAt().String(),
-		"html_url":   issue.GetHTMLURL(),
+		"comments":   issue.Comments,
+		"created_at": issue.CreatedAt.String(),
+		"updated_at": issue.UpdatedAt.String(),
+		"html_url":   issue.HTMLURL,
 	}
 }
 
-func formatPullRequests(prs []*gh.PullRequest) []map[string]any {
+func formatPullRequests(prs []*gogithub.PullRequest) []map[string]any {
 	result := make([]map[string]any, 0, len(prs))
 	for _, pr := range prs {
 		result = append(result, formatPullRequest(pr))
@@ -576,68 +581,73 @@ func formatPullRequests(prs []*gh.PullRequest) []map[string]any {
 	return result
 }
 
-func formatPullRequest(pr *gh.PullRequest) map[string]any {
+func formatPullRequest(pr *gogithub.PullRequest) map[string]any {
 	labels := make([]string, 0, len(pr.Labels))
 	for _, label := range pr.Labels {
-		labels = append(labels, label.GetName())
+		labels = append(labels, label.Name)
+	}
+
+	var mergeable bool
+	if pr.Mergeable != nil {
+		mergeable = *pr.Mergeable
 	}
 
 	return map[string]any{
-		"number":     pr.GetNumber(),
-		"title":      pr.GetTitle(),
-		"state":      pr.GetState(),
-		"body":       pr.GetBody(),
-		"user":       pr.GetUser().GetLogin(),
-		"head":       pr.GetHead().GetRef(),
-		"base":       pr.GetBase().GetRef(),
+		"number":     pr.Number,
+		"title":      pr.Title,
+		"state":      pr.State,
+		"body":       pr.Body,
+		"user":       userLogin(pr.User),
+		"head":       branchRef(pr.Head),
+		"base":       branchRef(pr.Base),
 		"labels":     labels,
-		"draft":      pr.GetDraft(),
-		"mergeable":  pr.GetMergeable(),
-		"merged":     pr.GetMerged(),
-		"additions":  pr.GetAdditions(),
-		"deletions":  pr.GetDeletions(),
-		"commits":    pr.GetCommits(),
-		"created_at": pr.GetCreatedAt().String(),
-		"updated_at": pr.GetUpdatedAt().String(),
-		"html_url":   pr.GetHTMLURL(),
+		"draft":      pr.Draft,
+		"mergeable":  mergeable,
+		"merged":     pr.Merged,
+		"additions":  pr.Additions,
+		"deletions":  pr.Deletions,
+		"commits":    pr.Commits,
+		"created_at": pr.CreatedAt.String(),
+		"updated_at": pr.UpdatedAt.String(),
+		"html_url":   pr.HTMLURL,
 	}
 }
 
-func formatCodeResults(results *gh.CodeSearchResult) map[string]any {
-	items := make([]map[string]any, 0, len(results.CodeResults))
-	for _, item := range results.CodeResults {
+func formatCodeResults(results *gogithub.CodeSearchResult) map[string]any {
+	items := make([]map[string]any, 0, len(results.Items))
+	for _, item := range results.Items {
 		items = append(items, map[string]any{
-			"name":       item.GetName(),
-			"path":       item.GetPath(),
-			"sha":        item.GetSHA(),
-			"html_url":   item.GetHTMLURL(),
-			"repository": item.GetRepository().GetFullName(),
+			"name":       item.Name,
+			"path":       item.Path,
+			"sha":        item.SHA,
+			"html_url":   item.HTMLURL,
+			"repository": repoFullName(item.Repository),
 		})
 	}
 
 	return map[string]any{
-		"total_count": results.GetTotal(),
+		"total_count": results.Total,
 		"items":       items,
 	}
 }
 
-func formatIssueSearchResults(results *gh.IssuesSearchResult) map[string]any {
-	items := make([]map[string]any, 0, len(results.Issues))
-	for _, issue := range results.Issues {
+func formatIssueSearchResults(results *gogithub.IssueSearchResult) map[string]any {
+	items := make([]map[string]any, 0, len(results.Items))
+	for _, issue := range results.Items {
 		items = append(items, map[string]any{
-			"number":     issue.GetNumber(),
-			"title":      issue.GetTitle(),
-			"state":      issue.GetState(),
-			"user":       issue.GetUser().GetLogin(),
-			"repository": issue.GetRepositoryURL(),
-			"html_url":   issue.GetHTMLURL(),
-			"is_pr":      issue.IsPullRequest(),
-			"created_at": issue.GetCreatedAt().String(),
+			"number":     issue.Number,
+			"title":      issue.Title,
+			"state":      issue.State,
+			"user":       userLogin(issue.User),
+			"repository": issue.RepositoryURL,
+			"html_url":   issue.HTMLURL,
+			"is_pr":      issue.IsPullRequest,
+			"created_at": issue.CreatedAt.String(),
 		})
 	}
 
 	return map[string]any{
-		"total_count": results.GetTotal(),
+		"total_count": results.Total,
 		"items":       items,
 	}
 }
