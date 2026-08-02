@@ -6,6 +6,29 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.6.0",
+      "date": "2026-08-01",
+      "highlights": [
+        { "description": "Migrated all GitHub API call sites (`omniskill/github`, `omnidevx`, `omnistorage/backend/github`) to gogithub's version-isolated `clientv1.Client`" },
+        { "description": "`github.com/google/go-github` is no longer a direct dependency anywhere in the module" },
+        { "description": "Upgraded `github.com/grokify/gogithub` to v0.15.0" }
+      ],
+      "breaking": [
+        { "description": "`omniskill/github` now uses `clientv1.Client` instead of a raw `*github.Client`; stable gogithub types don't expose go-github's `Get*()` accessors", "commit": "bc5b32c" },
+        { "description": "`omnidevx`'s profile collector and `omnistorage/backend/github` (`backend.go`, `batch.go`) now accept/construct `clientv1.Client` instead of `*github.Client`", "commit": "84a792e" },
+        { "description": "`github.com/google/go-github/v88` dropped as a direct dependency; `v89` remains only as gogithub's indirect dependency", "commit": "bc5b32c" }
+      ],
+      "dependencies": [
+        { "description": "Upgrade `github.com/grokify/gogithub` to v0.15.0", "commit": "84a792e" },
+        { "description": "Bump `github.com/plexusone/omnidevx-core` from v0.1.0 to v0.3.0", "commit": "d6a7210" },
+        { "description": "Remove `github.com/google/go-github/v88` as a direct dependency; `github.com/google/go-github/v89` remains as an indirect dependency of gogithub", "commit": "bc5b32c" }
+      ],
+      "upgradeGuide": [
+        { "description": "Replace any direct `*github.Client` usage passed into `omniskill/github`, `omnidevx`, or `omnistorage/backend/github` with a `gogithub/clientv1.Client` obtained via `clientv1.NewClient(ctx, token)`" },
+        { "description": "Remove direct imports of `github.com/google/go-github/v88` if you were relying on this module re-exporting it; use `gogithub` stable types instead" }
+      ]
+    },
+    {
       "version": "v0.5.0",
       "date": "2026-07-19",
       "highlights": [
