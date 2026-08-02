@@ -77,7 +77,7 @@ Omni-GitHub provides three main components:
 
 - 📊 Profile, per-repository, and daily contribution snapshots
 - 🔄 Canonical `devx.*` events for the OmniDevX domain
-- 🧮 REST + GraphQL via `go-github` and `githubv4`
+- 🧮 REST + GraphQL via `gogithub`'s `clientv1.Client` and `githubv4`
 
 ## Installation
 

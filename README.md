@@ -119,7 +119,7 @@ result, err := collector.Collect(ctx, core.CollectRequest{
 
 - 📊 Profile, per-repository, and daily contribution snapshots
 - 🔄 Canonical `devx.*` events for the OmniDevX domain
-- 🧮 REST + GraphQL via `go-github` and `githubv4`
+- 🧮 REST + GraphQL via `gogithub`'s `clientv1.Client` and `githubv4`
 
 ## Documentation
 
