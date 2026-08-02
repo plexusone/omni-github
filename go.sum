@@ -11,8 +11,8 @@ github.com/grokify/gogithub v0.15.0 h1:cKRYykjbuwAe1yzQYCcNMGHyUPxyhqe10zEgmBPuf
 github.com/grokify/gogithub v0.15.0/go.mod h1:r3c5J6UKCTv1vigQkulpeZGXfH3+EQ5540GZxGPVgbU=
 github.com/plexusone/omnidevx-core v0.3.0 h1:uKSJAjs74fzod5iM3W3opG53eNX1v4J0WHK4mC2QL/0=
 github.com/plexusone/omnidevx-core v0.3.0/go.mod h1:ryBtws1QCxC6eWAtNddW4doPzVDOz9tBZsoA0gC1w/A=
-github.com/plexusone/omniskill v0.10.0 h1:Nd/zfAGPNmnmRGyBhmMgXFS7lYcWbPtrT0k5cP8eOvY=
-github.com/plexusone/omniskill v0.10.0/go.mod h1:L0MW5av6S0EkgGByFMwDmTJBy/7h8ourBmQ5xxM2vQI=
+github.com/plexusone/omniskill v0.11.0 h1:vQ1CyWwgyBwr97DM8p/uDdox9ietPbnEE1z+EiSJzac=
+github.com/plexusone/omniskill v0.11.0/go.mod h1:cTKqpqEDbTCAqKBsYHdBd7+LySO2dPHJE1S1VlnOovI=
 github.com/plexusone/omnistorage-core v0.5.1 h1:tvsfTcJln6ZixKL75aE7tMf3yyP94hFDef7ASGlQBe8=
 github.com/plexusone/omnistorage-core v0.5.1/go.mod h1:NADK+H9XbIyYgNL6omq2ugId/uK9EouqF9OrM9BH0d4=
 github.com/shurcooL/githubv4 v0.0.0-20260209031235-2402fdf4a9ed h1:KT7hI8vYXgU0s2qaMkrfq9tCA1w/iEPgfredVP+4Tzw=
