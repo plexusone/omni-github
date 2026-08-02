@@ -74,6 +74,11 @@ func (s *Skill) Description() string {
 	return "Interact with GitHub repositories: issues, pull requests, code search"
 }
 
+// Version returns the skill version.
+func (s *Skill) Version() string {
+	return "1.0.0"
+}
+
 // Init initializes the GitHub client.
 func (s *Skill) Init(ctx context.Context) error {
 	if s.config.Token == "" {
