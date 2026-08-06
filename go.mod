@@ -3,7 +3,7 @@ module github.com/plexusone/omni-github
 go 1.26.0
 
 require (
-	github.com/grokify/gogithub v0.15.0
+	github.com/grokify/gogithub v0.17.0
 	github.com/plexusone/omnidevx-core v0.3.0
 	github.com/plexusone/omniskill v0.11.0
 	github.com/plexusone/omnistorage-core v0.5.1
