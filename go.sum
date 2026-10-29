@@ -13,8 +13,8 @@ github.com/plexusone/omnidevx-core v0.4.1 h1:zGwdr3tSkLIdyNCu+yUIkVZUaczt9zMfnkf
 github.com/plexusone/omnidevx-core v0.4.1/go.mod h1:hogpULebRMxZoYziqA/tw1rp+G7pnaL42mt+DCCXLnQ=
 github.com/plexusone/omniskill v0.12.0 h1:MFGlpB2/Tp7SWcrn2kNHQ+h8j9lfdChvCi4ntymOG3I=
 github.com/plexusone/omniskill v0.12.0/go.mod h1:cTKqpqEDbTCAqKBsYHdBd7+LySO2dPHJE1S1VlnOovI=
-github.com/plexusone/omnistorage-core v0.5.2 h1:vhascjTnSx3ITquf70d50o/B7cYeIUbJwUwzFVKqwB8=
-github.com/plexusone/omnistorage-core v0.5.2/go.mod h1:YGmwdm36lhgkl+NvQn89QDcteJiC3EGLoUcCO5ZUplg=
+github.com/plexusone/omnistorage-core v0.6.0 h1:6afcMOCllJ/7Bh9LB9y5EpClecbIohjERbTmJufR4k0=
+github.com/plexusone/omnistorage-core v0.6.0/go.mod h1:JIHiAp1NAeEWBv6DIdJ1PJSuYV9I2AjQl/2lmRgF9yU=
 github.com/shurcooL/githubv4 v0.0.0-20260209031235-2402fdf4a9ed h1:KT7hI8vYXgU0s2qaMkrfq9tCA1w/iEPgfredVP+4Tzw=
 github.com/shurcooL/githubv4 v0.0.0-20260209031235-2402fdf4a9ed/go.mod h1:zqMwyHmnN/eDOZOdiTohqIUKUrTFX62PNlu7IJdu0q8=
 github.com/shurcooL/graphql v0.0.0-20240915155400-7ee5256398cf h1:o1uxfymjZ7jZ4MsgCErcwWGtVKSiNAXtS59Lhs6uI/g=
